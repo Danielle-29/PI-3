@@ -1,0 +1,49 @@
+.signUp{
+  height: calc(100vh - 59px - 69px);
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.titulo-criarConta {
+  text-align: center;
+  margin: 1rem;
+  font-size: 1.5rem;
+  color: var(--secundary-color);
+}
+
+.btn-cadastrar{
+  margin-bottom: 4rem;
+}
+
+.idiomas {
+  display: flex;
+  flex-direction: column;
+  }
+
+.idioma {
+  display: flex;
+  align-items: center; /* Alinha os itens verticalmente ao centro */
+}
+
+.idioma input {
+  margin-right: 8px; /* Espaço entre o checkbox e o texto */
+}
+
+#select-perfil{
+  width: 350px;
+  border-radius: 8px;
+    padding: 8px;
+    border: 1px solid black;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 150vh;
+}
+
+.content {
+  flex: 1;
+}

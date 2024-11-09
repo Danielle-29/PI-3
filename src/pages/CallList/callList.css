@@ -1,0 +1,34 @@
+/* callList.css */
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container-list {
+  flex: 1;
+  padding: 20px;
+}
+
+
+.container-list {
+  height: calc(100vh - 59px - 69px);
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  text-align: center;
+}
+.card {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.container-card-list {
+  border-radius: 20px;
+}
