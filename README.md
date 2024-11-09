@@ -7,7 +7,7 @@
 
 <img align="center" width="100px" src="./src/assets/Centro_de_formação.png" alt="Logotipo do Centro de Formação Carlos Kopcak"><br>
 
-[Clique aqui para visualizar o site](https://pi-turma006.vercel.app/)
+[Clique aqui para visualizar o site](https://projeto-pi-02.vercel.app/criar-conta)
 </div>
   
 ***
