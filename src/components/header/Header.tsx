@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Button, Stack } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../../firebaseConfig";
 import { logoutUsuario } from "../../utils/authService";
 
 import "./header.css";
-import logo from "../../assets/Centro_de_formação.webp";
+import logo from "../../assets/logo_kopcak.png";
 
 const Header: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -32,8 +34,8 @@ const Header: React.FC = () => {
             <img
               className="logo-img"
               src={logo}
-              alt="logo Centro de formação Carlos Kopcak"
-              title="Centro de Fonação Carlos Kopcak"
+              alt="Logo Centro de formação Carlos Kopcak"
+              title="Centro de Formação Carlos Kopcak"
             />
           </Link>
         </div>
@@ -46,31 +48,35 @@ const Header: React.FC = () => {
                   <Link to="/resumo-estatistico">
                     <Button
                       className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}
+                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
                     >
                       Resumo Estatístico
                     </Button>
                   </Link>
                   <Button className="custom-button"
                     onClick={handleLogout}
-                    sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}>
+                    sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                     Sair
                   </Button>
                 </>
               ) : (
                 <>
+                {location.pathname !== "/login" && (
                   <Link to="/login">
                     <Button className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}>
+                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                       Login
                     </Button>
                   </Link>
+                )}
+                {location.pathname !== "/criar-conta" && (
                   <Link to="/criar-conta">
                     <Button className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}>
+                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                       Cadastro
                     </Button>
                   </Link>
+                )}
                 </>
               )}
             </Stack>
