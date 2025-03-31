@@ -1,12 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUsuario } from "../../utils/authService";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
-import logo from "../../assets/Centro de formação com sombra.webp";
-import { Alert } from "@mui/material";
+import logo from "../../assets/logo_kopcak.png";
+import { Alert, InputAdornment, TextField } from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
+
+const EmailIcon = () => (
+  <svg style={{ marginRight: "8px" }} xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#1B4BD2">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+  </svg>
+);
+
+const LockIcon = () => (
+  <svg style={{ marginRight: "8px" }} xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#1B4BD2">
+    <path d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 17a2 2 0 1 0 .001-3.999A2 2 0 0 0 12 17zm6-6V8a6 6 0 0 0-12 0v3H4v10h16V11h-2zm-2 0H8V8a4 4 0 0 1 8 0v3z" />
+  </svg>
+);
 
 const Login: React.FC = () => {
 
@@ -16,6 +30,11 @@ const Login: React.FC = () => {
   const [showAlert, setShowAlert] = useState(true);
   const [nomeUsuario, setNomeUsuario] = useState<string | null>(null);
   const navigate = useNavigate();
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    emailInputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     if (erro) {
@@ -53,7 +72,6 @@ const Login: React.FC = () => {
   };
 
   return (
-    <>
       <div className="login">
         <div className="img-login" aria-label="Logo do Centro de Formação">
           <img
@@ -66,28 +84,37 @@ const Login: React.FC = () => {
           <h1 id="titulo-login">Login</h1>
 
           <div className="container-inputs">
-            <label htmlFor="email">E-mail</label>
-            <input
+            <TextField
+              id="email"
               type="email"
+              label="E-mail"
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              inputRef={emailInputRef}
               required
-              aria-required="true"
-              aria-describedby="erro-email"
+              fullWidth
+              margin="normal"
+              InputProps={{
+                startAdornment: <InputAdornment position="start"><EmailIcon /></InputAdornment>,
+              }}
             />
 
-            <label htmlFor="senha">Senha</label>
-            <input
-              type="password"
-              placeholder="Digite sua Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-              aria-required="true"
-              aria-describedby="erro-senha"
-            />
-          </div>
+          <TextField
+            id="senha"
+            type="password"
+            label="Senha"
+            placeholder="Digite sua senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+            fullWidth
+            margin="normal"
+            InputProps={{
+              startAdornment: <InputAdornment position="start"><LockIcon /></InputAdornment>,
+            }}
+          />
+        </div>
           <button className="form-login-btn" type="submit" aria-label="Entrar na conta">
             Entrar
           </button>
@@ -101,7 +128,7 @@ const Login: React.FC = () => {
               style={{
                 color: "white",
                 position: "fixed",
-                top: "100px",
+                top: "80px",
                 right: "20px",
                 width: "80%",
                 maxWidth: "300px",
@@ -110,21 +137,22 @@ const Login: React.FC = () => {
                 opacity: showAlert ? 1 : 0,
                 transition: "opacity 1s ease-out",
                 height: "auto",
+                zIndex: 10,
               }}
+              aria-live="assertive"
             >
               <AlertTitle>Aviso</AlertTitle>
               {erro}
             </Alert>
           )}
         </form>
-        <p>
+        <p style={{ fontSize: "0.9rem", marginTop: "1rem" }}>
           Ainda não tem conta?
           <Link to="/criar-conta" aria-label="Criar uma nova conta">
-            <strong> Cadastre-se aqui</strong>
+            <strong style={{ color: "#1B4BD2" }}> Cadastre-se aqui</strong>
           </Link>
         </p>
       </div>
-    </>
   );
 };
 
