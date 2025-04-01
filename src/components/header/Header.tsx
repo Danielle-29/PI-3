@@ -48,14 +48,14 @@ const Header: React.FC = () => {
                   <Link to="/resumo-estatistico">
                     <Button
                       className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
+                      sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}
                     >
                       Resumo Estatístico
                     </Button>
                   </Link>
                   <Button className="custom-button"
                     onClick={handleLogout}
-                    sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
+                    sx={{ color: "#1B4BD2", "&:hover": { color: "#E43858" } }}>
                     Sair
                   </Button>
                 </>
@@ -66,14 +66,6 @@ const Header: React.FC = () => {
                     <Button className="custom-button"
                       sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                       Login
-                    </Button>
-                  </Link>
-                )}
-                {location.pathname !== "/criar-conta" && (
-                  <Link to="/criar-conta">
-                    <Button className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
-                      Cadastro
                     </Button>
                   </Link>
                 )}
