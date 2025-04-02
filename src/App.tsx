@@ -1,5 +1,4 @@
 import React from "react";
-import ChamadaFirestore from "./components/ChamadaFirestore";
 import "./App.css";
 import Router from "./routes/Router";
 

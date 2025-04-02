@@ -3,6 +3,8 @@ import espanhol from "../../assets/espanha.webp";
 import italia from "../../assets/italia.png";
 import "./callList.css";
 import React, { useState, useEffect } from "react";
+import { db } from '../../firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -11,38 +13,12 @@ import CardActionArea from "@mui/material/CardActionArea";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Checkbox, Button, Alert } from '@mui/material';
 
 interface Aluno {
-  NOME?: string;
-  NUMERO?: string | number;
-  MATRICULA?: string;
-  DOCUMENTO?: string;
-  ESPANHOL?: string;
-  DOCUMEN?: string;
-  TELEFONE?: string | number;
+  nome: string;
+  documento?: string;
+  numero?: string | number;
   presente?: boolean;
   ausente?: boolean;
 }
-
-const carregarDadosCurso = async (curso: string): Promise<Aluno[]> => {
-  let dados: Aluno[] = [];
-  try {
-    switch (curso) {
-      case 'ingles':
-        dados = (await import('../../aulas/ingles.json')).default;
-        break;
-      case 'espanhol':
-        dados = (await import('../../aulas/espanhol.json')).default;
-        break;
-      case 'italiano':
-        dados = (await import('../../aulas/italiano.json')).default;
-        break;
-      default:
-        throw new Error('Curso não encontrado');
-    }
-  } catch (error) {
-    console.error('Erro ao carregar os dados do curso:', error);
-  }
-  return dados;
-};
 
 const TEMPO_LIMITE = 10000;
 
@@ -92,24 +68,27 @@ const CallList: React.FC = () => {
   };
 
   useEffect(() => {
-    const carregarDados = async () => {
-      if (curso) {
-        const dados = await carregarDadosCurso(curso);
+    const carregarAlunosFirestore = async () => {
+      if (!curso) return;
+      try {
+        const snapshot = await getDocs(collection(db, 'cursos', curso, 'alunos'));
+        const dadosFirestore = snapshot.docs.map(doc => doc.data() as Aluno);
         const presencasSalvas = carregarPresencas();
-        const alunosComPresenca = dados.map((aluno) => {
-          const alunoPresenca = presencasSalvas.find(
-            (presenca: Aluno) => presenca.MATRICULA === aluno.MATRICULA
-          );
+        const alunosComPresenca = dadosFirestore.map((aluno) => {
+          const alunoPresenca = presencasSalvas.find((p: Aluno) => p.nome === aluno.nome);
           return {
             ...aluno,
-            ...alunoPresenca,
+            ...alunoPresenca
           };
         });
         setAlunos(alunosComPresenca);
         setExibirContagem(false);
+      } catch (error) {
+        console.error('Erro ao buscar alunos do Firestore:', error);
       }
     };
-    carregarDados();
+
+    carregarAlunosFirestore();
   }, [curso]);
 
   const handleCursoClick = (nomeCurso: string) => {
@@ -137,56 +116,32 @@ const CallList: React.FC = () => {
         <p>Escolha o curso</p>
 
         <div className="card">
-          <div
-            role="button"
-            onClick={() => handleCursoClick('ingles')}
-            aria-label="Selecionar curso de Inglês"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('ingles')}
-          >
+          <div role="button" onClick={() => handleCursoClick('ingles')} aria-label="Selecionar curso de Inglês" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('ingles')}>
             <Card sx={{ maxWidth: 360 }}>
               <CardActionArea>
                 <CardMedia component="img" height="140" image={ingles} alt="Inglês" title="Inglês" />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Inglês
-                  </Typography>
+                  <Typography gutterBottom variant="h5" component="div">Inglês</Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
           </div>
-          <div
-            role="button"
-            onClick={() => handleCursoClick('espanhol')}
-            aria-label="Selecionar curso de Espanhol"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('espanhol')}
-          >
+          <div role="button" onClick={() => handleCursoClick('espanhol')} aria-label="Selecionar curso de Espanhol" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('espanhol')}>
             <Card sx={{ maxWidth: 360 }}>
               <CardActionArea>
                 <CardMedia component="img" height="140" image={espanhol} alt="Espanhol" title="Espanhol" />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Espanhol
-                  </Typography>
+                  <Typography gutterBottom variant="h5" component="div">Espanhol</Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
           </div>
-          <div
-            role="button"
-            onClick={() => handleCursoClick('italiano')}
-            aria-label="Selecionar curso de Italiano"
-            tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('italiano')}
-          >
+          <div role="button" onClick={() => handleCursoClick('italiano')} aria-label="Selecionar curso de Italiano" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && handleCursoClick('italiano')}>
             <Card sx={{ maxWidth: 360 }}>
               <CardActionArea>
                 <CardMedia component="img" height="140" image={italia} alt="Italiano" title="Italiano" />
                 <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Italiano
-                  </Typography>
+                  <Typography gutterBottom variant="h5" component="div">Italiano</Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
@@ -195,7 +150,7 @@ const CallList: React.FC = () => {
 
         {curso && (
           <div>
-            <h2 className="titulo">Lista de Presença - {curso === 'ingles' ? 'Inglês' : curso.charAt(0).toUpperCase() + curso.slice(1)}</h2>
+            <h2 className="titulo">Lista de Presença - {curso.charAt(0).toUpperCase() + curso.slice(1)}</h2>
 
             {alertaVisivel && (
               <Alert severity="success" onClose={() => setAlertaVisivel(false)} sx={{ maxWidth: '400px', margin: '0 auto' }}>
@@ -222,7 +177,7 @@ const CallList: React.FC = () => {
                 <TableBody>
                   {alunos.map((aluno, index) => (
                     <TableRow key={index}>
-                      <TableCell>{aluno.NOME}</TableCell>
+                      <TableCell>{aluno.nome}</TableCell>
                       <TableCell align="center">
                         <Checkbox
                           checked={aluno.presente || false}
@@ -244,12 +199,7 @@ const CallList: React.FC = () => {
             </TableContainer>
 
             <div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={salvarPresenca}
-                sx={{ marginTop: '20px' }}
-              >
+              <Button variant="contained" color="primary" onClick={salvarPresenca} sx={{ marginTop: '20px' }}>
                 Salvar Presença
               </Button>
             </div>
@@ -261,3 +211,4 @@ const CallList: React.FC = () => {
 };
 
 export default CallList;
+

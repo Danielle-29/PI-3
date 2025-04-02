@@ -10,7 +10,6 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import FormSent from "../pages/formSent/FormSent";
 import NotFound from "../pages/notFound/NotFound";
-import ChamadaFirestore from "../components/ChamadaFirestore";
 import ResumoEstatistico from "../pages/resumoEstatistico/ResumoEstatistico";
 import CadastrarUsuario from "../pages/cadastrarUsuario/CadastrarUsuario";
 
@@ -36,7 +35,6 @@ const Router = () => {
         <Route path="/cadastro-aluno" element={<PrivateRoute element={<RegisterStudent />} />} />
         <Route path="/lista-de-presenca" element={<PrivateRoute element={<CallList />} />} />
         <Route path="/form-enviado" element={<PrivateRoute element={<FormSent />} />} />
-        <Route path="/upload-dados" element={<PrivateRoute element={<ChamadaFirestore />} />} />
         <Route path="/resumo-estatistico" element={<PrivateRoute element={<ResumoEstatistico />} />} />
         <Route path="/cadastrar-usuario" element={<PrivateRoute element={<CadastrarUsuario />} />} />
 
