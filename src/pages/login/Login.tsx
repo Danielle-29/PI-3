@@ -7,6 +7,9 @@ import { db } from "../../firebaseConfig";
 import logo from "../../assets/logo_kopcak.png";
 import { Alert, InputAdornment, TextField } from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 
 const EmailIcon = () => (
   <svg style={{ marginRight: "8px" }} xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#1B4BD2">
@@ -29,6 +32,8 @@ const Login: React.FC = () => {
   const [erro, setErro] = useState('');
   const [showAlert, setShowAlert] = useState(true);
   const [nomeUsuario, setNomeUsuario] = useState<string | null>(null);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+
   const navigate = useNavigate();
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -56,20 +61,34 @@ const Login: React.FC = () => {
       const user = await loginUsuario(email, senha);
       const usuarioDoc = await getDoc(doc(db, "usuarios", user.uid));
       if (usuarioDoc.exists()) {
-        setNomeUsuario(usuarioDoc.data().nome);
-        alert(`Bem-vindo, ${usuarioDoc.data().nome}!`);
-      }
-      navigate('/');
-    } catch (error: any) {
-      if (error.code === 'auth/user-not-found') {
-        setErro('Usuário não encontrado!')
-      } else if (error.code === 'auth/wrong-password') {
-        setErro('Senha incorreta!');
+        const dados = usuarioDoc.data();
+        setNomeUsuario(dados.nome);
+  
+        // Redirecionamento baseado no perfil
+        if (dados.perfil === "admin") {
+          navigate("/resumo-estatistico");
+        } else {
+          navigate("/");
+        }
+  
+        // Mostra o alerta de boas vindas
+        setTimeout(() => {
+          alert(`Bem-vindo, ${dados.nome}!`);
+        }, 300);
       } else {
-        setErro('Erro ao fazer login. Tenta novamente!');
+        setErro("Usuário sem dados de perfil no banco de dados!");
+      }
+    } catch (error: any) {
+      if (error.code === "auth/user-not-found") {
+        setErro("Usuário não encontrado!");
+      } else if (error.code === "auth/wrong-password") {
+        setErro("Senha incorreta!");
+      } else {
+        setErro("Erro ao fazer login. Tente novamente!");
       }
     }
   };
+  
 
   return (
       <div className="login">
@@ -102,7 +121,7 @@ const Login: React.FC = () => {
 
           <TextField
             id="senha"
-            type="password"
+            type={mostrarSenha ? "text" : "password"}
             label="Senha"
             placeholder="Digite sua senha"
             value={senha}
@@ -111,8 +130,31 @@ const Login: React.FC = () => {
             fullWidth
             margin="normal"
             InputProps={{
-              startAdornment: <InputAdornment position="start"><LockIcon /></InputAdornment>,
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <button
+                    type="button"
+                    onClick={() => setMostrarSenha(!mostrarSenha)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0,
+                      color:"#1B4BD2",
+                    }}
+                    aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+                  >
+                    {mostrarSenha ? <VisibilityOff /> : <Visibility />}
+                  </button>
+                </InputAdornment>
+              ),
             }}
+            
           />
         </div>
           <button className="form-login-btn" type="submit" aria-label="Entrar na conta">
@@ -146,12 +188,6 @@ const Login: React.FC = () => {
             </Alert>
           )}
         </form>
-        <p style={{ fontSize: "0.9rem", marginTop: "1rem" }}>
-          Ainda não tem conta?
-          <Link to="/criar-conta" aria-label="Criar uma nova conta">
-            <strong style={{ color: "#1B4BD2" }}> Cadastre-se aqui</strong>
-          </Link>
-        </p>
       </div>
   );
 };

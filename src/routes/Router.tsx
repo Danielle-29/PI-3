@@ -12,6 +12,8 @@ import FormSent from "../pages/formSent/FormSent";
 import NotFound from "../pages/notFound/NotFound";
 import ChamadaFirestore from "../components/ChamadaFirestore";
 import ResumoEstatistico from "../pages/resumoEstatistico/ResumoEstatistico";
+import CadastrarUsuario from "../pages/cadastrarUsuario/CadastrarUsuario";
+
 
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
   const [user, loading] = useAuthState(auth);
@@ -36,6 +38,7 @@ const Router = () => {
         <Route path="/form-enviado" element={<PrivateRoute element={<FormSent />} />} />
         <Route path="/upload-dados" element={<PrivateRoute element={<ChamadaFirestore />} />} />
         <Route path="/resumo-estatistico" element={<PrivateRoute element={<ResumoEstatistico />} />} />
+        <Route path="/cadastrar-usuario" element={<PrivateRoute element={<CadastrarUsuario />} />} />
 
         {/* Rota de erro */}
         <Route path="*" element={<NotFound />} />
