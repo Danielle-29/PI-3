@@ -1,0 +1,60 @@
+.cadastro-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  .cadastro-card {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cadastro-imagem img {
+    width: 120px;
+    margin-bottom: 1rem;
+  }
+  
+  .cadastro-titulo {
+    color: #1B4BD2;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .cadastro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .cadastro-botao {
+    background-color: #1B4BD2 !important;
+  }
+  
+  .cadastro-botao:hover {
+    background-color: #824295 !important;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 480px) {
+    .cadastro-card {
+      padding: 1rem;
+    }
+  
+    .cadastro-imagem img {
+      width: 100px;
+    }
+  
+    .cadastro-form {
+      gap: 0.8rem;
+    }
+  
+    .cadastro-titulo {
+      font-size: 1.2rem;
+    }
+  }
+  
+  

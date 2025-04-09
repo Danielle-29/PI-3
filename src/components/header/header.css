@@ -54,7 +54,7 @@ header {
 }
 
 .custom-button:hover {
-  color: var(--tertiary-color);
+  color: #824295;
 }
 
 nav {

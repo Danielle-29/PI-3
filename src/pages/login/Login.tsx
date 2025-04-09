@@ -72,9 +72,6 @@ const Login: React.FC = () => {
         }
   
         // Mostra o alerta de boas vindas
-        setTimeout(() => {
-          alert(`Bem-vindo, ${dados.nome}!`);
-        }, 300);
       } else {
         setErro("Usuário sem dados de perfil no banco de dados!");
       }
