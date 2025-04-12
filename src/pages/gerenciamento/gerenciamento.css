@@ -1,0 +1,84 @@
+.container-gerenciamento {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .container-gerenciamento h1 {
+    font-size: 2rem;
+    color: #1B4BD2;
+    margin-bottom: 0.8rem;
+  }
+  
+  .container-gerenciamento p {
+    color: #444;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+  }
+  
+  .card-item {
+    max-width: 320px;
+    width: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+  }
+  
+  .card-item .MuiTypography-root {
+    font-weight: 600;
+    color: #1B4BD2;
+    text-align: center;
+    font-size: 1.1rem;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .card-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 2.2rem;
+    }
+  
+    .card-item {
+      max-width: 92%;
+    }
+  
+    .container-gerenciamento h1 {
+      font-size: 1.8rem;
+    }
+  
+    .container-gerenciamento p {
+      font-size: 1rem;
+    }
+  
+    .card-item .MuiTypography-root {
+      font-size: 1rem;
+    }
+  
+    .card-item img {
+      height: 160px;
+    }
+  }
+  

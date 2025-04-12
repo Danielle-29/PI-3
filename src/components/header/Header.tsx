@@ -84,12 +84,12 @@ const Header: React.FC = () => {
                   </Link>
                 )}
 
-                <Link to="/">
+                <Link to="/gerenciamento">
                   <Button
                     className="custom-button"
                     sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
                   >
-                    Gerenciar Alunos
+                    Gerenciamento
                   </Button>
                 </Link>
 
