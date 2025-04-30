@@ -16,6 +16,8 @@ import CadastrarUsuario from "../pages/cadastrarUsuario/CadastrarUsuario";
 import Gerenciamento from "../pages/gerenciamento/Gerenciamento"; // ✅ nova importação
 import ListarUsuario from "../pages/Usuarios/ListarUsuario";
 import EditarUsuario from "../pages/Usuarios/EditarUsuario";
+import ResumoAlunos from "../pages/gerenciamentoAlunos/ResumoAlunos";
+import EditarAluno from "../pages/gerenciamentoAlunos/EditarAluno";
 
 
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
@@ -42,6 +44,8 @@ const Router = () => {
         <Route path="/gerenciamento" element={<PrivateRoute element={<Gerenciamento />} />} /> {/* ✅ nova rota */}
         <Route path="/usuarios" element={<PrivateRoute element={<ListarUsuario />} />} />
         <Route path="/editar-usuario/:id" element={<PrivateRoute element={<EditarUsuario />} />} />
+        <Route path="/admin/gerenciamento-alunos" element={<PrivateRoute element={<ResumoAlunos/>} />} />
+        <Route path="/admin/editar-aluno/:cursoId/:turmaId/:alunoId" element={<PrivateRoute element={<EditarAluno />} />} />
 
         {/* Rota fallback */}
         <Route path="*" element={<NotFound />} />

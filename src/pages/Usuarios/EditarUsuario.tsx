@@ -1,29 +1,17 @@
-""import React, { useEffect, useState } from "react";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import {
   Box,
   Typography,
   Paper,
   CircularProgress,
-  IconButton,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogActions,
   Button,
   useMediaQuery,
   useTheme,
   TextField,
   MenuItem
 } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate, useParams } from "react-router-dom";
 
 const EditarUsuario: React.FC = () => {
@@ -43,13 +31,15 @@ const EditarUsuario: React.FC = () => {
     const carregarUsuario = async () => {
       try {
         const usuarioRef = doc(db, "usuarios", id!);
-        const snapshot = await getDocs(collection(db, "usuarios"));
-        const usuario = snapshot.docs.find((doc) => doc.id === id)?.data();
+        const snapshot = await getDoc(usuarioRef);
 
-        if (usuario) {
+        if (snapshot.exists()) {
+          const usuario = snapshot.data();
           setNome(usuario.nome);
           setEmail(usuario.email);
           setPerfil(usuario.perfil);
+        } else {
+          setErro("Usuário não encontrado");
         }
       } catch (error: any) {
         setErro("Erro ao carregar usuário");
@@ -63,7 +53,8 @@ const EditarUsuario: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await doc(db, "usuarios", id!).set({ nome, email, perfil });
+      const usuarioRef = doc(db, "usuarios", id!);
+      await updateDoc(usuarioRef, { nome, email, perfil });
       setSucesso(true);
       setErro("");
       setTimeout(() => navigate("/usuarios"), 2000);

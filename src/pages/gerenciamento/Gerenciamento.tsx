@@ -23,7 +23,7 @@ const Gerenciamento: React.FC = () => {
       <p>Escolha uma das opções abaixo para gerenciar o sistema:</p>
 
       <div className="card-container">
-        <div className="card-item" onClick={() => navigate("/cadastro-aluno")}> 
+        <div className="card-item" onClick={() => navigate("/admin/gerenciamento-alunos")}> 
           <Card sx={{ maxWidth: 300 }}>
             <CardActionArea>
               <CardMedia

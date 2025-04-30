@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./resumoEstatistico.css";
 import { PieChart, Pie, Cell } from "recharts"; 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

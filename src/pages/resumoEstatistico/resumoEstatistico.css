@@ -1,21 +1,47 @@
 .container-resumo {
-    min-height: 100vh;
-    padding: 2rem 1rem 4rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    box-sizing: border-box;
-  }
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f7f8fa;
+}
 
-  .grafico {
-    margin: 2rem auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+.titulo-resumo {
+  margin-bottom: 1.5rem;
+  color: #1B4BD2;
+  font-weight: bold;
+}
 
-  .titulo-resumo{
-    margin: 1rem;
-  }
+.grafico {
+  margin: 2rem 0;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  background-color: #ffffff;
+}
+
+/* Centralizar todo o texto da tabela */
+.MuiTableCell-root {
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Deixar primeira letra maiúscula na coluna de cursos */
+.curso-nome {
+  text-transform: capitalize;
+}
+
+/* Deixar a tabela mais elegante */
+.MuiTable-root {
+  border-collapse: separate;
+  border-spacing: 0 8px; /* Espaço entre as linhas */
+}
+
+.MuiTableRow-root {
+  background-color: #ffffff;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
