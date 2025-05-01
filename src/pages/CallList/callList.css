@@ -10,12 +10,19 @@
 
 .container-list {
   flex: 1;
-  padding: 20px;
-}
-
-.container-list {
+  padding: 20px;  
   height: calc(100vh - 59px - 69px);
   text-align: center;
+}
+
+
+.contagem-presenca {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  font-size: 1.1rem;
 }
 
 a {
@@ -32,4 +39,8 @@ a {
 
 .container-card-list {
   border-radius: 20px;
+}
+
+select {
+  text-align: left;
 }
