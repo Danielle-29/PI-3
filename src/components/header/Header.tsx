@@ -95,6 +95,27 @@ const Header: React.FC = () => {
                   </Link>
                 )}
 
+                {perfil === "professor" && (
+                  <>
+                    <Link to="/cadastro-aluno">
+                      <Button
+                        className="custom-button"
+                        sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
+                      >
+                        Cadastrar Aluno
+                      </Button>
+                    </Link>
+                    <Link to="/lista-de-presenca">
+                      <Button
+                        className="custom-button"
+                        sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
+                      >
+                        Lista de Presença
+                      </Button>
+                    </Link>
+                  </>
+                )}
+
                 {(perfil === "admin" || perfil === "funcionario") && (
                   <Link to="/gerenciamento">
                     <Button
