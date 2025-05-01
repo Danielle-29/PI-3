@@ -1,0 +1,60 @@
+/* Container principal */
+.container-resumo-alunos {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  
+  /* Título */
+  .container-resumo-alunos h1 {
+    text-align: center;
+    color: #1B4BD2;
+    font-size: 1.8rem;
+    margin-bottom: 32px;
+    font-weight: bold;
+  }
+  
+  /* Tabela */
+  .table-wrapper {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+  }
+  
+  /* Estilo para cabeçalho da tabela */
+  .table-wrapper thead th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  /* Células de ação */
+  .acao-btn {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .acao-btn:hover {
+    transform: scale(1.15);
+  }
+  
+  /* Mensagem de carregamento ou vazio */
+  .loading-msg,
+  .empty-msg {
+    text-align: center;
+    color: #888;
+    margin-top: 32px;
+    font-style: italic;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 600px) {
+    .container-resumo-alunos h1 {
+      font-size: 1.4rem;
+    }
+  
+    .table-wrapper {
+      margin: 0 -8px;
+    }
+  }
+  

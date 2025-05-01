@@ -1,116 +1,165 @@
 import React, { useEffect, useState } from "react";
-import { PieChart, Pie, Cell } from "recharts"; 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Typography, Box, Card, CardContent, Divider } from "@mui/material";
-import InfoIcon from '@mui/icons-material/Info';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import {
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Tooltip,
+  useMediaQuery,
+  useTheme,
+  TablePagination,
+  TextField
+} from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import "./resumoAlunos.css";
 
-interface ResumoCurso {
-  totalAlunos: number;
-  curso: string;
-}
-
-const ResumoEstatistico: React.FC = () => {
-  const [resumo, setResumo] = useState<Record<string, ResumoCurso>>({});
-  const [error, setError] = useState<string | null>(null);
-
-  const COLORS = ["#1B4BD2", "#824295", "#00C49F", "#FF8042"];
+const ResumoAlunos: React.FC = () => {
+  const [alunos, setAlunos] = useState<any[]>([]);
+  const [filtro, setFiltro] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    async function fetchResumo() {
-      try {
-        const response = await fetch("https://obterresumoestatisticov2-lrmzy6mw5q-rj.a.run.app");
-        const data = await response.json();
-        setResumo(data);
-      } catch (err) {
-        console.error("Erro ao buscar resumo:", err);
-        setError("Erro ao carregar dados.");
+    async function buscarAlunos() {
+      const cursos = ["espanhol", "ingles"];
+      const listaAlunos: any[] = [];
+
+      for (const cursoId of cursos) {
+        const turmasRef = collection(db, "cursos", cursoId, "turmas");
+        const turmasSnapshot = await getDocs(turmasRef);
+
+        for (const turmaDoc of turmasSnapshot.docs) {
+          const turmaId = turmaDoc.id;
+          const alunosRef = collection(db, "cursos", cursoId, "turmas", turmaId, "alunos");
+          const alunosSnapshot = await getDocs(alunosRef);
+
+          alunosSnapshot.forEach((alunoDoc) => {
+            const alunoData = alunoDoc.data();
+            listaAlunos.push({
+              id: alunoDoc.id,
+              ...alunoData,
+              curso: cursoId,
+              turma: turmaId,
+            });
+          });
+        }
       }
+
+      setAlunos(listaAlunos);
     }
-    fetchResumo();
+
+    buscarAlunos();
   }, []);
 
-  const data = Object.values(resumo);
+  const handleExcluir = async (cursoId: string, turmaId: string, alunoId: string) => {
+    const confirmar = window.confirm("Tem certeza que deseja excluir este aluno?");
+    if (!confirmar) return;
 
-  const totalAlunos = data.reduce((acc, cur) => acc + cur.totalAlunos, 0);
+    try {
+      const alunoDocRef = doc(db, "cursos", cursoId, "turmas", turmaId, "alunos", alunoId);
+      await deleteDoc(alunoDocRef);
+      setAlunos((prev) => prev.filter((a) => a.id !== alunoId));
+    } catch (erro) {
+      console.error("❌ Erro ao excluir aluno: ", erro);
+      alert("Erro ao excluir aluno.");
+    }
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const alunosFiltrados = alunos.filter((aluno) =>
+    (aluno.nomeCompleto || "").toLowerCase().includes(filtro.toLowerCase())
+  );
 
   return (
-    <div className="container-resumo">
-      <Box className="titulo-resumo">
-        <Typography variant="h5" sx={{ color: "#1B4BD2", fontWeight: "bold" }}>
-          <BarChartIcon sx={{ verticalAlign: "middle", mr: 1 }} /> Resumo Estatístico por Curso
-        </Typography>
+    <Box className="container-resumo-alunos">
+      <Typography variant="h5" align="center" gutterBottom>
+        Gerenciamento de Alunos
+      </Typography>
+
+      <Box mb={2} display="flex" justifyContent="center">
+        <TextField
+          placeholder="Buscar por nome..."
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+          variant="outlined"
+          size="small"
+          sx={{ width: "100%", maxWidth: 400 }}
+        />
       </Box>
 
-      <Card className="grafico">
-        <CardContent>
-          <Typography variant="h6" align="center" gutterBottom>
-            Distribuição de Alunos
-          </Typography>
-          {data.length > 0 ? (
-            <PieChart width={400} height={300}>
-              <Pie
-                data={data}
-                dataKey="totalAlunos"
-                nameKey="curso"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                label={({ name, value }) => {
-                  const cursoNome = name.charAt(0).toUpperCase() + name.slice(1);
-                  const percentual = ((value / totalAlunos) * 100).toFixed(0);
-                  return `${cursoNome}: ${percentual}%`;
-                }}
-              >
-                {data.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-          ) : (
-            <Typography align="center" color="textSecondary">
-              No data to display
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card className="grafico">
-        <CardContent>
-          <Typography variant="h6" align="center" gutterBottom>
-            Informações dos Cursos
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
+      {alunosFiltrados.length === 0 ? (
+        <Typography align="center" className="empty-msg">
+          Nenhum aluno encontrado.
+        </Typography>
+      ) : (
+        <Paper>
+          <TableContainer className="table-wrapper">
+            <Table size={isMobile ? "small" : "medium"}>
               <TableHead>
                 <TableRow>
-                  <TableCell align="center"><b>Curso</b></TableCell>
-                  <TableCell align="center"><b>Total de Alunos</b></TableCell>
+                  <TableCell><strong>Nome</strong></TableCell>
+                  <TableCell><strong>Curso</strong></TableCell>
+                  <TableCell><strong>Turma</strong></TableCell>
+                  <TableCell align="right"><strong>Ações</strong></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((curso, index) => (
-                  <TableRow key={index}>
-                    <TableCell align="center">
-                      {curso.curso.charAt(0).toUpperCase() + curso.curso.slice(1)}
+                {alunosFiltrados.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((aluno) => (
+                  <TableRow key={aluno.id}>
+                    <TableCell>{aluno.nomeCompleto || aluno.nome || aluno.id}</TableCell>
+                    <TableCell>{aluno.curso}</TableCell>
+                    <TableCell>{aluno.turma}</TableCell>
+                    <TableCell align="right">
+                      <Tooltip title="Editar">
+                        <IconButton onClick={() => navigate(`/admin/editar-aluno/${aluno.curso}/${aluno.turma}/${aluno.id}`)}>
+                          <Edit color="primary" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Excluir">
+                        <IconButton onClick={() => handleExcluir(aluno.curso, aluno.turma, aluno.id)}>
+                          <Delete color="error" />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
-                    <TableCell align="center">{curso.totalAlunos}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-        </CardContent>
-      </Card>
-    </div>
+          <TablePagination
+            component="div"
+            count={alunosFiltrados.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </Paper>
+      )}
+    </Box>
   );
 };
 
-export default ResumoEstatistico;
+export default ResumoAlunos;
+
