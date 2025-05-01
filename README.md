@@ -7,7 +7,7 @@
 
 <img align="center" width="100px" src="./src/assets/Centro_de_formação.webp" alt="Logotipo do Centro de Formação Carlos Kopcak"><br>
 
-[Clique aqui para visualizar o site](https://pi-turma013-carlos-kopcak.vercel.app/)
+[Clique aqui para visualizar o site](projetointegrador3-839sq1u4v-thais-stellas-projects.vercel.app)
 
 ### PI-Turma013
 </div>
