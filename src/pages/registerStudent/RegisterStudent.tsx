@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { db } from "../../firebaseConfig";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormData, schema } from "../../utils/FormInterfaces";
-import { useNavigate } from "react-router-dom";
 import { cadastrarAluno } from "../../utils/firestoreService";
+import { collection, getDocs } from "firebase/firestore";
 
 import "./registerStudent.css";
 
 const RegisterStudent: React.FC = () => {
-  const navigate = useNavigate();
-  const [text, setText] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
-  const [selectedOptionType, setSelectedOptionType] = useState("");
+  const [cursoMatriculado, setCursoMatriculado] = useState("");
+  const [turma, setTurma] = useState("");
+  const [turmasDisponiveis, setTurmasDisponiveis] = useState<string[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -20,544 +22,233 @@ const RegisterStudent: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    const carregarTurmas = async () => {
+      if (!cursoMatriculado) return;
+      const snapshot = await getDocs(collection(db, "cursos", cursoMatriculado, "turmas"));
+      const turmas = snapshot.docs.map(doc => doc.id);
+      setTurmasDisponiveis(turmas);
+    };
+    carregarTurmas();
+  }, [cursoMatriculado]);
+
   const onSubmit = async (data: FormData) => {
+    console.log("🚨 Enviando dados do formulário", data);
+
     try {
-      
-      await cadastrarAluno(data.cursoMatriculado, {
-        nome: data.nome,
-        documento: data.endereco?.documento || "",
-        numero: data.endereco?.telefone1 || "",
-        matricula: data.matricula || "", 
-      });
-
-        navigate("/form-enviado");
-        console.log("Aluno cadastrado com sucesso!", data);
-      }catch(error) {
-        console.error("Erro ao cadastrar aluno no Firestore: ", error);
-      }
-  };
-
-  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
-  };
-
-  const handleOptionChangeType = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSelectedOptionType(event.target.value);
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.target;
-    if (value.length <= 100) {
-      setText(value);
+      await cadastrarAluno(cursoMatriculado, turma, data);
+      setModalVisible(true);
+      console.log("Aluno cadastrado com sucesso!", data);
+    } catch (error) {
+      console.error("Erro ao cadastrar aluno:", error);
     }
   };
 
   return (
-    <div className="container-register" aria-labelledby="formulario-matricula">
-      <h1>Formulário de Matrícula</h1>
-      <div className="container-form-register">
-
-        <form onSubmit={handleSubmit(onSubmit)} role="form">
-          <label htmlFor="cursoMatriculado">
-            Selecione o curso desejado<span className="required">*</span>:
-          </label>
-          <select
-            {...register("cursoMatriculado", { required: true })}
-            id="curso-escolhido"
-            aria-describedby="curso-error"
-          >
-            <option value="" disabled selected>
-              Selecione
-            </option>
-            <option value="Espanhol">Espanhol</option>
-            <option value="Inglês">Inglês</option>
-            <option value="Italiano">Italiano</option>
-          </select>
-          {errors.cursoMatriculado && (
-            <div className="errors" role="alert">{errors.cursoMatriculado.message}</div>
-
-          )}
-
-          <div className="dados-pessoais">
-            <p className="titulos">Dados Pessoais: </p>
-
-            <div className="partes">
-              <label htmlFor="nome">
-                Nome Completo<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                id="nome-aluno"
-                placeholder="Digite o nome do aluno"
-                {...register("nome", { required: true })}
-                aria-describedby="nome-error"
-              />
-
-              {errors.nome && (
-                <div className="errors" role="alert">{errors.nome.message}</div>
-              )}
-
-              <label htmlFor="dataNascimento">
-                Data de Nascimento<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                {...register("dataNascimento", { required: true })}
-                id="data-nasc-aluno"
-                placeholder="dd/mm/aaaa"
-                maxLength={10}
-              />
-              {errors.dataNascimento && (
-                <div className="errors" role="alert">{errors.dataNascimento.message}</div>
-              )}
-
-              <label htmlFor="idade" id="idade">
-                Idade<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                maxLength={2}
-                id="idade"
-                {...register("idade", { required: true })}
-              />
-              {errors.idade && (
-                <div className="errors" role="alert">{errors.idade.message}</div>
-              )}
-            </div>
-
-            <div className="partes">
-              <label htmlFor="estadoCivil" id="estadoCivil">
-                Estado Civil<span className="required">*</span>:
-              </label>
-              <select
-                {...register("estadoCivil", { required: true })}
-                id="estado-civil"
-              >
-                <option value="" disabled selected>
-                  Selecione
-                </option>
-                <option value="solteiro">Solteiro(a)</option>
-                <option value="casado">Casado(a)</option>
-                <option value="divorciado">Divorciado(a)</option>
-                <option value="viuvo">Viúvo(a)</option>
-              </select>
-              {errors.estadoCivil && (
-                <div role="alert" className="errors">
-                  {errors.estadoCivil.message}
-                </div>
-              )}
-
-              <label htmlFor="genero" id="genero">
-                Gênero<span className="required">*</span>:{" "}
-              </label>
-              <select id="genero" {...register("genero", { required: true })}>
-                <option value="" disabled selected>
-                  Selecione
-                </option>
-                <option value="homem_Cis">Homem Cis</option>
-                <option value="mulher_Cis">Mulher Cis</option>
-                <option value="homem_Trans">Homem Trans</option>
-                <option value="mulher_Trans">Mulher Trans</option>
-                <option value="nao_binario">Não Binário</option>
-                <option value="outro">Outro/Prefiro não responder</option>
-              </select>
-              {errors.genero && (
-                <div role="alert" className="errors">
-                  {errors.genero.message}
-                </div>
-              )}
-
-              <label htmlFor="orientacaoSexual">Orientação Sexual: </label>
-              <select name="orientacaoSexual" id="orientacaoSexual">
-                <option value="" disabled selected>
-                  Selecione
-                </option>
-                <option value="hetero">Hetero</option>
-                <option value="homossexual">Homossexual</option>
-                <option value="bissexual">Bissexual</option>
-                <option value="outro-orientacao">
-                  Outro/Prefiro não responder
-                </option>
-              </select>
-            </div>
-
-            <div className="partes">
-              <label htmlFor="nomeMae">
-                Mãe<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                id="nomeMae"
-                placeholder="Digite o nome da mãe do aluno"
-                {...register("nomeMae", { required: true })}
-              />
-              {errors.nomeMae && (
-                <div role="alert" className="errors">
-                  {errors.nomeMae.message}
-                </div>
-              )}
-
-              <label htmlFor="nomePai">Pai: </label>
-              <input
-                type="text"
-                name="nomePai"
-                id="nomePai"
-                placeholder="Digite o nome do pai do aluno"
-              />
-            </div>
-
-            <div className="partes">
-              <label htmlFor="nacionalidade">
-                Nacionalidade<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                id="nacionalidade"
-                placeholder="Digite a sua Nacionalidade"
-                {...register("nacionalidade", { required: true })}
-              />
-              {errors.nacionalidade && (
-                <div role="alert" className="errors">
-                  {errors.nacionalidade.message}
-                </div>
-              )}
-
-              <label htmlFor="naturalidade">
-                Naturalidade/Estado<span className="required">*</span>:{" "}
-              </label>
-              <input
-                type="text"
-                id="naturalidade"
-                placeholder="Cidade/Estado"
-                {...register("naturalidade", { required: true })}
-              />
-              {errors.naturalidade && (
-                <div role="alert" className="errors">
-                  {errors.naturalidade.message}
-                </div>
-              )}
-            </div>
-            <div className="partes">
-              <label htmlFor="corEtnia">Cor/Etnia<span className="required">*</span>:{" "} </label>
-              <select
-                {...register("corEtnia", { required: true })}
-                id="corEtnia"
-              >
-                <option value="" disabled selected>
-                  Selecione
-                </option>
-                <option value="amarelo">Amarelo</option>
-                <option value="branca">Branca</option>
-                <option value="indigena">Indígena</option>
-                <option value="Parda">Parda</option>
-                <option value="Preta">Preta</option>
-                <option value="NaoDeclarado">Prefiro não declarar</option>
-              </select>
-              {errors.corEtnia && (
-                <div role="alert" className="errors">
-                  {errors.corEtnia.message}
-                </div>
-              )}
-
-              <label htmlFor="situacaoOcupacional">
-                Situação Ocupacional:{" "}
-              </label>
-              <select name="situacaoOcupacional" id="situacaoOcupacional">
-                <option value="" disabled selected>
-                  Selecione
-                </option>
-                <option value="primeiro-emprego">1º Emprego</option>
-                <option value="aponsentado">Aponsentado</option>
-                <option value="autonomo">Autônomo</option>
-                <option value="desempregado">Desempregado</option>
-                <option value="empregado">Empregado</option>
-                <option value="empregador">Empregador</option>
-                <option value="Estudante">Estudante</option>
-              </select>
-            </div>
-
-            <div className="partes-text">
-              <label htmlFor="saude">
-                Possui alguma deficiência/Problema de saúde?
-              </label>
-              <textarea
-                name="saude"
-                id="text-saude"
-                rows={3}
-                cols={40}
-                value={text}
-                onChange={handleChange}
-                maxLength={100}
-                style={{ resize: "none" }}
-                aria-label="Campo para descrever alguma deficiência ou problema de saúde, caso exista"
-              ></textarea>
-            </div>
+    <div className="container-register">
+      <h1 className="form-title">Formulário de Matrícula</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="form-centered">
+          <div className="field-single">
+            <label>Curso*</label>
+            <select value={cursoMatriculado} onChange={(e) => setCursoMatriculado(e.target.value)} required>
+              <option value="">Selecione</option>
+              <option value="ingles">Inglês</option>
+              <option value="espanhol">Espanhol</option>
+            </select>
           </div>
-
-          <div>
-            <p className="titulos">Endereço:</p>
-            <label htmlFor="rua">
-              Rua<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="text"
-              {...register("endereco.rua", { required: true })}
-            />
-            {errors.endereco && errors.endereco.rua && (
-              <div role="alert" className="errors">
-                {errors.endereco.rua.message}
-              </div>
-            )}
-
-            <label htmlFor="complemento">Complemento: </label>
-            <input type="text" name="complemento" />
-
-            <label htmlFor="bairro">
-              Bairro<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="text"
-              {...register("endereco.bairro", { required: true })}
-            />
-            {errors.endereco && errors.endereco.bairro && (
-              <div role="alert" className="errors">
-                {errors.endereco.bairro.message}
-              </div>
-            )}
-
-            <label htmlFor="cidade">
-              Cidade<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="text"
-              {...register("endereco.cidade", { required: true })}
-            />
-            {errors.endereco && errors.endereco.cidade && (
-              <div role="alert" className="errors">
-                {errors.endereco.cidade.message}
-              </div>
-            )}
-
-            <label htmlFor="uf">
-              UF<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="text"
-              {...register("endereco.uf", { required: true })}
-              maxLength={2}
-            />
-            {errors.endereco && errors.endereco.uf && (
-              <div role="alert" className="errors">
-                {errors.endereco.uf.message}
-              </div>
-            )}
-            <label htmlFor="cep">
-              CEP<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="text"
-              maxLength={8}
-              placeholder="00000000"
-              {...register("endereco.cep", { required: true })}
-            />
-            {errors.endereco && errors.endereco.cep && (
-              <div role="alert" className="errors">
-                {errors.endereco.cep.message}
-              </div>
-            )}
-
-            <label htmlFor="telefone1">
-              Telefone1<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="tel"
-              id="telefone1"
-              maxLength={11}
-              {...register("endereco.telefone1", { required: true })}
-            />
-            {errors.endereco && errors.endereco.telefone1 && (
-              <div role="alert" className="errors">
-                {errors.endereco.telefone1.message}
-              </div>
-            )}
-
-            <p className="titulos">Telefones de Emergência</p>
-
-            <input
-              type="tel"
-              id="telefone2"
-              name="telefone2"
-              maxLength={11}
-              placeholder="Telefone 2"
-              aria-label="Telefone de emergência 2"
-
-            />
-
-            <input
-              type="tel"
-              id="telefone3"
-              name="telefone3"
-              maxLength={11}
-              placeholder="Telefone 3"
-              aria-label="Telefone de emergência 3"
-            />
-
-            <label htmlFor="email">
-              Email<span className="required">*</span>:{" "}
-            </label>
-            <input
-              type="email"
-              id="email"
-              {...register("endereco.email", { required: true })}
-            />
-
-            {errors.endereco && errors.endereco.email && (
-              <div role="alert" className="errors">
-                {errors.endereco.email.message}
-              </div>
-            )}
+          <div className="field-single">
+            <label>Turma*</label>
+            <select value={turma} onChange={(e) => setTurma(e.target.value)} required>
+              <option value="">Selecione</option>
+              {turmasDisponiveis.map((t) => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
           </div>
-        <div>
-          <p className="titulos">
-            Dados do Responsável <span>(Quando menor ou incapaz)</span>:
-          </p>
+        </div>
 
-          <label htmlFor="nome-res" className="label-name">
-            Nome:{" "}
-          </label>
-          <input type="text" id="nome-res" name="nome-res" />
+        {cursoMatriculado && turma && (
+          <>
+            <div className="double-field">
+              <div>
+                <label>Nome Completo*</label>
+                <input {...register("nomeCompleto")} />
+                {errors.nomeCompleto && <p className="errors">{errors.nomeCompleto.message}</p>}
+              </div>
+              <div>
+                <label>Data de Nascimento*</label>
+                <input type="date" {...register("dataNascimento")} />
+                {errors.dataNascimento && <p className="errors">{errors.dataNascimento.message}</p>}
+              </div>
+            </div>
 
-          <label htmlFor="cpf">CPF: </label>
-          <input type="text" id="cpf" name="cpf" maxLength={11} />
+            <div className="double-field">
+              <div>
+                <label>Idade*</label>
+                <input {...register("idade")} />
+                {errors.idade && <p className="errors">{errors.idade.message}</p>}
+              </div>
+              <div>
+                <label>Gênero*</label>
+                <select {...register("genero")}>
+                  <option value="">Selecione</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Feminino">Feminino</option>
+                </select>
+                {errors.genero && <p className="errors">{errors.genero.message}</p>}
+              </div>
+            </div>
 
-          <label htmlFor="rg">RG: </label>
-          <input type="text" id="rg" name="rg" maxLength={11} />
+            <div className="double-field">
+              <div>
+                <label>Estado Civil*</label>
+                <select {...register("estadoCivil")}>
+                  <option value="">Selecione</option>
+                  <option value="Solteiro(a)">Solteiro(a)</option>
+                  <option value="Casado(a)">Casado(a)</option>
+                  <option value="Divorciado(a)">Divorciado(a)</option>
+                  <option value="Separado(a)">Separado(a)</option>
+                </select>
+                {errors.estadoCivil && <p className="errors">{errors.estadoCivil.message}</p>}
+              </div>
+              <div>
+                <label>Nome da Mãe*</label>
+                <input {...register("nomeMae")} />
+                {errors.nomeMae && <p className="errors">{errors.nomeMae.message}</p>}
+              </div>
+            </div>
 
-          <label htmlFor="telefone-con">Telefone para contato: </label>
-          <input type="tel" id="contato" name="contato" maxLength={11} />
+            <div className="double-field">
+              <div>
+                <label>Nome do Pai</label>
+                <input {...register("nomePai")} />
+              </div>
+              <div>
+                <label>Nacionalidade*</label>
+                <input {...register("nacionalidade")} />
+                {errors.nacionalidade && <p className="errors">{errors.nacionalidade.message}</p>}
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Naturalidade*</label>
+                <input {...register("naturalidade")} />
+                {errors.naturalidade && <p className="errors">{errors.naturalidade.message}</p>}
+              </div>
+              <div>
+                <label>Cor/Etnia*</label>
+                <input {...register("corEtnia")} />
+                {errors.corEtnia && <p className="errors">{errors.corEtnia.message}</p>}
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Situação Ocupacional</label>
+                <input {...register("situacaoOcupacional")} />
+              </div>
+              <div>
+                <label>Saúde</label>
+                <textarea {...register("saude")} />
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Rua*</label>
+                <input {...register("endereco.rua")} />
+              </div>
+              <div>
+                <label>Complemento</label>
+                <input {...register("endereco.complemento")} />
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Bairro*</label>
+                <input {...register("endereco.bairro")} />
+              </div>
+              <div>
+                <label>Cidade*</label>
+                <input {...register("endereco.cidade")} />
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>UF*</label>
+                <input {...register("endereco.uf")} />
+              </div>
+              <div>
+                <label>CEP*</label>
+                <input type="text" {...register("endereco.cep")} />
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Telefone*</label>
+                <input type="tel" {...register("endereco.telefone1")} />
+              </div>
+              <div>
+                <label>Email*</label>
+                <input type="email" {...register("endereco.email")} />
+              </div>
+            </div>
+
+            <div className="double-field">
+              <div>
+                <label>Documento</label>
+                <input {...register("endereco.documento")} />
+              </div>
+              <div>
+                <label>Matrícula</label>
+                <input {...register("matricula")} />
+              </div>
+            </div>
+
+            <div className="form-section">
+              <p className="titulos"><strong>Responsável</strong> <span>(Preencher se menor de idade)</span></p>
+              <div className="double-field">
+                <div>
+                  <label>Nome</label>
+                  <input {...register("responsavel.nome")} />
+                </div>
+                <div>
+                  <label>CPF</label>
+                  <input {...register("responsavel.cpf")} />
+                </div>
+              </div>
+              <div className="double-field">
+                <div>
+                  <label>RG</label>
+                  <input {...register("responsavel.rg")} />
+                </div>
+                <div>
+                  <label>Telefone para Contato</label>
+                  <input {...register("responsavel.telefoneContato")} />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-footer">
+              <button type="submit" className="btn-submit">CADASTRAR</button>
+            </div>
+          </>
+        )}
+      </form>
+
+      {modalVisible && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>Aluno cadastrado com sucesso!</p>
+            <button onClick={() => setModalVisible(false)}>OK</button>
           </div>
-          <div>
-
-          <p className="titulos">Dados Escolaridade:</p>
-
-          <p className="titulos-ens">Ensino Fundamental: </p>
-          <label>
-            <input
-              type="radio"
-              name="ensino-fund"
-              value="option1"
-              checked={selectedOption === "option1"}
-              onChange={handleOptionChange}
-            />
-            Completo
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="ensino-fund"
-              value="option2"
-              checked={selectedOption === "option2"}
-              onChange={handleOptionChange}
-            />
-            Incompleto
-          </label>
-          <p className="titulos-obs">Se incompleto, informe o Ano/série</p>
-          <input type="text" name="ensino-fund" />
-
-          <p className="titulos-ens">Ensino Médio: </p>
-          <label>
-            <input
-              type="radio"
-              name="ensino-med"
-              value="option3"
-              checked={selectedOption === "option3"}
-              onChange={handleOptionChange}
-            />
-            Completo
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="ensino-med"
-              value="option4"
-              checked={selectedOption === "option4"}
-              onChange={handleOptionChange}
-            />
-            Incompleto
-          </label>
-          <p className="titulos-obs">Se incompleto, informe o Ano/série</p>
-          <input type="text" name="ensino-med" />
-
-          <p className="titulos-ens">Ensino Superior: </p>
-          <label>
-            <input
-              type="radio"
-              name="ensino-sup"
-              value="option5"
-              checked={selectedOption === "option5"}
-              onChange={handleOptionChange}
-            />
-            Completo
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="ensino-sup"
-              value="option6"
-              checked={selectedOption === "option6"}
-              onChange={handleOptionChange}
-            />
-            Incompleto
-          </label>
-          <p className="titulos-obs">Observação: </p>
-          <input type="text" name="ensino-sup" />
-
-          <p className="titulos">Dados da escola:</p>
-
-          <label htmlFor="escola">Escola: </label>
-          <input type="text" name="escola" id="escola" />
-
-          <label htmlFor="municipio">Município: </label>
-          <input type="text" name="municipio" id="municipio" />
-
-          <label htmlFor="uf">UF: </label>
-          <input type="text" name="cidade" maxLength={2} />
-          </div>
-          <div>
-
-          <p className="titulos">Tipo de Ensino:</p>
-          <label>
-            <input
-              type="radio"
-              name="tipo-ensino"
-              value="regular"
-              checked={selectedOptionType === "regular"}
-              onChange={handleOptionChangeType}
-            />
-            Regular
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="tipo-ensino"
-              value="eja"
-              checked={selectedOptionType === "eja"}
-              onChange={handleOptionChangeType}
-            />
-            Educação Jovens e Adultos
-          </label>
-          </div>
-          <button className="form-login-btn inscricao" type="submit">
-            Cadastrar
-          </button>
-        </form>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

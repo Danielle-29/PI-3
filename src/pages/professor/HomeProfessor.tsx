@@ -1,9 +1,10 @@
-// Arquivo: src/pages/professor/HomeProfessor.tsx
 import React, { useState, useEffect } from "react";
 import { Box, Typography, TextField, Paper, Divider, Button } from "@mui/material";
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import 'dayjs/locale/pt-br';
+
 import "./HomeProfessor.css";
 
 interface ConteudosSalvos {
@@ -57,7 +58,7 @@ const HomeProfessor: React.FC = () => {
           <Typography variant="h6" align="center" gutterBottom>
             Calendário de Aulas
           </Typography>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"pt-br"}>
             <StaticDatePicker
               displayStaticWrapperAs="desktop"
               value={dataSelecionada}

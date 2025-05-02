@@ -20,6 +20,7 @@ import ListarUsuario from "../pages/Usuarios/ListarUsuario";
 import EditarUsuario from "../pages/Usuarios/EditarUsuario";
 import ResumoAlunos from "../pages/gerenciamentoAlunos/ResumoAlunos";
 import EditarAluno from "../pages/gerenciamentoAlunos/EditarAluno";
+import FormTeste from "../pages/FormTeste";
 
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
   const [user, loading] = useAuthState(auth);
@@ -60,6 +61,7 @@ const Router = () => {
       <Routes>
         {/* Rotas públicas */}
         <Route path="/login" element={<Login />} />
+        <Route path="/form-teste" element={<FormTeste/>} />
 
         {/* Redirecionamento dinâmico baseado no perfil */}
         <Route path="/" element={<PrivateRoute element={<RedirectByPerfil />} />} />

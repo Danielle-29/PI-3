@@ -1,8 +1,7 @@
 import * as yup from "yup";
 
 interface FormData {
-  cursoMatriculado: string;
-  nome: string;
+  nomeCompleto: string;
   dataNascimento: string;
   idade: string;
   estadoCivil: string;
@@ -24,8 +23,6 @@ interface FormData {
     uf: string;
     cep: string;
     telefone1: string;
-    telefone2?: string;
-    telefone3?: string;
     email: string;
     documento?: string;
   };
@@ -35,32 +32,16 @@ interface FormData {
     rg?: string;
     telefoneContato?: string;
   };
-  escolaridade: {
-    ensinoFundamental?: string;
-    serieFundamental?: string;
-    ensinoMedio?: string;
-    serieMedio?: string;
-    ensinoSuperior?: string;
-    observacao?: string;
-  };
-  escola: {
-    nome?: string;
-    municipio?: string;
-    uf?: string;
-    tipoEnsino?: string;
-  };
 }
 
 const schema = yup.object().shape({
-  cursoMatriculado: yup.string().required("Selecione um curso"),
-  nome: yup.string().required("Nome é obrigatório"),
+  nomeCompleto: yup.string().required("Nome é obrigatório"),
   dataNascimento: yup
     .string()
     .required("Informe a data de nascimento do aluno"),
   idade: yup.string().required("Informe a idade do aluno"),
   estadoCivil: yup.string().required("Estado civil é obrigatório"),
   genero: yup.string().required("Gênero é obrigatório"),
-  orientacaoSexual: yup.string(),
   nomeMae: yup.string().required("Nome da mãe é obrigatório"),
   nomePai: yup.string(),
   nacionalidade: yup.string().required("Nacionalidade é obrigatória"),
@@ -76,8 +57,6 @@ const schema = yup.object().shape({
     uf: yup.string().required("UF é obrigatória"),
     cep: yup.string().required("CEP é obrigatório"),
     telefone1: yup.string().required("Telefone 1 é obrigatório"),
-    telefone2: yup.string(),
-    telefone3: yup.string(),
     email: yup.string().email().required("Email é obrigatório"),
     documento: yup.string(),
   }),
@@ -86,20 +65,6 @@ const schema = yup.object().shape({
     cpf: yup.string(),
     rg: yup.string(),
     telefoneContato: yup.string(),
-  }),
-  escolaridade: yup.object().shape({
-    ensinoFundamental: yup.string(),
-    serieFundamental: yup.string(),
-    ensinoMedio: yup.string(),
-    serieMedio: yup.string(),
-    ensinoSuperior: yup.string(),
-    observacao: yup.string(),
-  }),
-  escola: yup.object().shape({
-    nome: yup.string(),
-    municipio: yup.string(),
-    uf: yup.string(),
-    tipoEnsino: yup.string(),
   }),
 });
 

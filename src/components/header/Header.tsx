@@ -45,7 +45,8 @@ const Header: React.FC = () => {
 
   const rotaLogo = () => {
     if (perfil === "admin") return "/resumo-estatistico";
-    if (perfil === "professor" || perfil === "funcionario") return "/home";
+    if (perfil === "professor") return "/";
+    if (perfil === "funcionario") return "/home";
     return "/";
   };
 
@@ -53,14 +54,14 @@ const Header: React.FC = () => {
     <header aria-label="Cabeçalho do site">
       <div className="container-header">
         <div className="logo">
-          <Link to={rotaLogo()}>
             <img
               className="logo-img"
               src={logo}
               alt="Logo Centro de formação Carlos Kopcak"
               title="Centro de Formação Carlos Kopcak"
+              onClick={() => navigate(rotaLogo())}
+              style={{ cursor: "pointer" }}
             />
-          </Link>
         </div>
 
         <div className="links-menu">
