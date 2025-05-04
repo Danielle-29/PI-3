@@ -7,11 +7,14 @@ import {
   FormControl,
   InputLabel,
   Paper,
-  Divider
+  Divider,
+  Container
 } from "@mui/material";
 import { db } from "../../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import dayjs from "dayjs";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import NotesIcon from "@mui/icons-material/Notes";
 import "../funcionario/PlanejamentoFuncionario.css";
 
 const VisualizarPlanejamento: React.FC = () => {
@@ -44,45 +47,60 @@ const VisualizarPlanejamento: React.FC = () => {
   };
 
   return (
-    <div className="page-container">
-      <div className="container-list">
-        <Typography variant="h5" align="center" fontWeight="bold" sx={{ color: "#1B4BD2", mb: 3 }}>
-          Planejamento de Aulas (Somente Leitura)
-        </Typography>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h5" className="titulo-planejamento">
+        Planejamento de Aulas (Somente Leitura)
+      </Typography>
 
-        <Box display="flex" justifyContent="center" gap={3} mb={4}>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Curso</InputLabel>
-            <Select value={curso} onChange={(e) => setCurso(e.target.value)} label="Curso">
-              <MenuItem value="ingles">Inglês</MenuItem>
-              <MenuItem value="espanhol">Espanhol</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Turma</InputLabel>
-            <Select value={turma} onChange={(e) => setTurma(e.target.value)} label="Turma">
-              {turmasDisponiveis.map((t) => (
-                <MenuItem key={t} value={t}>{t}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
+      <Box display="flex" justifyContent="center" gap={3} mb={4} flexWrap="wrap" mt={4}>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel>Curso</InputLabel>
+          <Select value={curso} onChange={(e) => setCurso(e.target.value)} label="Curso">
+            <MenuItem value="ingles">Inglês</MenuItem>
+            <MenuItem value="espanhol">Espanhol</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel>Turma</InputLabel>
+          <Select value={turma} onChange={(e) => setTurma(e.target.value)} label="Turma">
+            {turmasDisponiveis.map((t) => (
+              <MenuItem key={t} value={t}>{t}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
 
-        <Box textAlign="center" mb={2}>
-          <button className="btn-submit" onClick={carregarPlanejamentos}>Buscar Planejamentos</button>
-        </Box>
+      <Box textAlign="center" mb={3}>
+        <button className="botao-buscar-planejamento" onClick={carregarPlanejamentos}>
+          Buscar Planejamentos
+        </button>
+      </Box>
 
-        {planejamentos.map((item, index) => (
-          <Paper key={index} sx={{ p: 2, mb: 2 }}>
-            <Typography fontWeight="bold" color="primary">
+      {planejamentos.map((item, index) => (
+        <Paper
+          key={index}
+          sx={{
+            p: 3,
+            mb: 3,
+            borderRadius: 3,
+            boxShadow: 3,
+            backgroundColor: "#fafafa"
+          }}
+        >
+          <Box display="flex" alignItems="center" mb={1} gap={1}>
+            <CalendarTodayIcon fontSize="small" color="primary" />
+            <Typography fontWeight="bold" color="primary" fontSize="16px">
               {dayjs(item.data).format("DD/MM/YYYY")}
             </Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography>{item.texto}</Typography>
-          </Paper>
-        ))}
-      </div>
-    </div>
+          </Box>
+          <Divider sx={{ mb: 1 }} />
+          <Box display="flex" alignItems="flex-start" gap={1}>
+            <NotesIcon fontSize="small" sx={{ mt: "2px" }} />
+            <Typography sx={{ whiteSpace: 'pre-line' }}>{item.texto}</Typography>
+          </Box>
+        </Paper>
+      ))}
+    </Container>
   );
 };
 
