@@ -12,6 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build project
+        run: npm run build
+
       - name: Deploy to Firebase Hosting
         run: |
             npm install -g firebase-tools
