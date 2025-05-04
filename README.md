@@ -25,9 +25,10 @@
 
 ## 1. Proposta Atual
 
-Este projeto visou aprimorar o software de organização de dados acadêmicos e administrativos para o Centro de Idiomas do Polo UAB Diadema, dando continuidade ao trabalho de 2024. A atual fase foca em tornar o software funcional para professores e coordenação, implementando chamada com registro de conteúdo, atualização do banco de dados e painel Power BI, substituindo a solução inicial baseada em Moodle devido a limitações.
+Este projeto tem como objetivo aprimorar o software de organização de dados acadêmicos e administrativos para o Centro de Idiomas do Polo UAB Diadema, dando continuidade ao trabalho de 2024. A atual fase foca em tornar o software funcional para professores e coordenação, implementando chamada com registro de conteúdo, atualização do banco de dados e painel Power BI, substituindo a solução inicial baseada em Moodle devido a limitações.
 
-Até o momento, foram desenvolvidos o redesign do logo, a funcionalidade de chamada digital com registro de conteúdo, a estrutura do banco de dados atualizada e uma versão inicial do painel Power BI para visualização de dados relevantes. O desenvolvimento utiliza tecnologias front-end (HTML5, CSS, YUI, Bootstrap, jQuery) e back-end (PHP, banco de dados), com foco em acessibilidade e futura implementação em nuvem.
+Até o momento, foram desenvolvidos o redesign do logo, a funcionalidade de chamada digital com registro de conteúdo, a estrutura do banco de dados atualizada e uma versão inicial do painel Power BI para visualização de dados relevantes. O desenvolvimento atual utiliza tecnologias modernas como React com TypeScript no front-end, Firebase (Firestore, Authentication e Cloud Functions) no back-end, e Material UI (MUI) para a interface visual, com foco em acessibilidade e integração contínua via Vercel.
+
 
 -----
 
@@ -45,22 +46,22 @@ Vercel para desenvolvimento e hospedagem na nuvem para simplficar a criação e 
 
 ## 3. Grupo Atual de Desenvolvedores
 
-| Aluno                          | RA       |
-| ------------------------------ | -------- |
+| Aluno                             | RA       |
+| ------------------------------    | -------- |
 | Alberto Ferreira Borges de Gouvea | 2207479  |
-| Andre Luiz Gomes Martins       | 2218473  |
-| Danielle Dos Santos Bonfim     | 2220085  |
-| Edcarlos De Sousa Santos       | 2205440  |
-| Fernando Barbosa Ferraz        | 2222816  |
-| Luiz Antonio Mendes De Lima    | 23203395 |
-| Sandra Maria Felix De Araujo   | 2222006  |
-| Thais Stella Teixeira          | 1402571  |
+| Andre Luiz Gomes Martins          | 2218473  |
+| Danielle Dos Santos Bonfim        | 2220085  |
+| Edcarlos De Sousa Santos          | 2205440  |
+| Fernando Barbosa Ferraz           | 2222816  |
+| Luiz Antonio Mendes De Lima       | 23203395 |
+| Sandra Maria Felix De Araujo      | 2222006  |
+| Thais Stella Teixeira             | 1402571  |
 
 -----
 
 ## 4. Próximos Passos
 
-A próxima etapa envolve a apresentação da versão preliminar à coordenação para obter feedback sobre usabilidade e adequação, direcionando as próximas fases de desenvolvimento.
+A próxima etapa envolve a apresentação da versão preliminar à coordenação para obter feedback sobre usabilidade e adequação. A partir disso, pretendemos implementar ajustes visuais, melhorias na acessibilidade e validações com usuários reais.
 
 -----
 
