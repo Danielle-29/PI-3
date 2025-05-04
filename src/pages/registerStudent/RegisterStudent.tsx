@@ -235,7 +235,7 @@ const RegisterStudent: React.FC = () => {
             </div>
 
             <div className="form-footer">
-              <button type="submit" className="btn-submit">CADASTRAR</button>
+              <button aria-label="cadastrar aluno" type="submit" className="btn-submit">CADASTRAR</button>
             </div>
           </>
         )}
@@ -245,7 +245,7 @@ const RegisterStudent: React.FC = () => {
         <div className="modal">
           <div className="modal-content">
             <p>Aluno cadastrado com sucesso!</p>
-            <button onClick={() => setModalVisible(false)}>OK</button>
+            <button aria-label="modal cadastro realizado" onClick={() => setModalVisible(false)}>OK</button>
           </div>
         </div>
       )}

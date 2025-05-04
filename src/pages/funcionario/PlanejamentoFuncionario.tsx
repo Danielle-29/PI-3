@@ -71,7 +71,7 @@ const VisualizarPlanejamento: React.FC = () => {
       </Box>
 
       <Box textAlign="center" mb={3}>
-        <button className="botao-buscar-planejamento" onClick={carregarPlanejamentos}>
+        <button aria-label="Buscar Planejamento" className="botao-buscar-planejamento" onClick={carregarPlanejamentos}>
           Buscar Planejamentos
         </button>
       </Box>

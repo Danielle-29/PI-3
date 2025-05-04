@@ -63,7 +63,6 @@ const HomeProfessor: React.FC = () => {
 
   const handleExcluir = async () => {
     setPlanejamento("");
-    // Aqui poderia adicionar deleteDoc() se quiser apagar do Firestore também
   };
 
   return (
@@ -127,10 +126,10 @@ const HomeProfessor: React.FC = () => {
             variant="outlined"
           />
           <Box display="flex" justifyContent="flex-end" gap={8} mt={8}>
-            <Button variant="contained" color="primary" onClick={handleSalvar}>
+            <Button aria-label="Salvar" variant="contained" color="primary" onClick={handleSalvar}>
               Salvar
             </Button>
-            <Button variant="outlined" color="error" onClick={handleExcluir}>
+            <Button aria-label="Excluir" variant="outlined" color="error" onClick={handleExcluir}>
               Excluir
             </Button>
           </Box>

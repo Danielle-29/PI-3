@@ -51,7 +51,9 @@ const Header: React.FC = () => {
   };
 
   return (
+    
     <header aria-label="Cabeçalho do site">
+      <a href="#conteudo-principal" className="skip-link">Pular para o conteúdo</a>
       <div className="container-header">
         <div className="logo">
             <img

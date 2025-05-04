@@ -178,7 +178,7 @@ const CallList: React.FC = () => {
               </LocalizationProvider>
             </Box>
 
-            <Button variant="contained" onClick={carregarAlunos} disabled={!turmaSelecionada}>
+            <Button aria-label="carregamento de alunos" variant="contained" onClick={carregarAlunos} disabled={!turmaSelecionada}>
               Carregar Alunos
             </Button>
           </Box>
@@ -234,7 +234,7 @@ const CallList: React.FC = () => {
             </TableContainer>
 
             <Box textAlign="center">
-              <Button variant="contained" color="primary" onClick={salvarPresenca} sx={{ mt: 3 }}>
+              <Button aria-label="salvar presença" variant="contained" color="primary" onClick={salvarPresenca} sx={{ mt: 3 }}>
                 Salvar Presença
               </Button>
             </Box>
@@ -244,7 +244,7 @@ const CallList: React.FC = () => {
         <Dialog open={popupAberto} onClose={() => setPopupAberto(false)}>
           <DialogTitle>✅ Presenças registradas com sucesso!</DialogTitle>
           <DialogActions>
-            <Button onClick={() => setPopupAberto(false)} autoFocus>
+            <Button aria-label="popup marcação presença" onClick={() => setPopupAberto(false)} autoFocus>
               OK
             </Button>
           </DialogActions>
