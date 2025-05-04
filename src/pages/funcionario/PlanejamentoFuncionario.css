@@ -1,0 +1,22 @@
+.titulo-planejamento {
+    color: #1B4BD2;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 24px;
+  }
+  
+  .botao-buscar-planejamento {
+    background-color: #1B4BD2;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .botao-buscar-planejamento:hover {
+    background-color: #824295;
+  }
+  

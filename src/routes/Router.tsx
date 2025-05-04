@@ -22,14 +22,19 @@ import ResumoAlunos from "../pages/gerenciamentoAlunos/ResumoAlunos";
 import EditarAluno from "../pages/gerenciamentoAlunos/EditarAluno";
 import ResumoPresencas from "../pages/resumoPresencas/ResumoPresencas";
 
+// Novo: páginas do funcionário
+import GerenciamentoFuncionario from "../pages/funcionario/GerenciamentoFuncionario";
+import ConsultaPresencaAluno from "../pages/funcionario/ConsultaPresencaAluno";
+import PlanejamentoFuncionario from "../pages/funcionario/PlanejamentoFuncionario";
 
+// Middleware para proteger rotas privadas
 const PrivateRoute = ({ element }: { element: JSX.Element }) => {
   const [user, loading] = useAuthState(auth);
   if (loading) return <p>Carregando...</p>;
   return user ? element : <Navigate to="/login" />;
 };
 
-// 🔁 Redirecionamento com base no perfil
+// Redirecionamento dinâmico com base no perfil
 const RedirectByPerfil: React.FC = () => {
   const [user, loading] = useAuthState(auth);
   const [perfil, setPerfil] = useState<string | null>(null);
@@ -52,10 +57,25 @@ const RedirectByPerfil: React.FC = () => {
 
   if (perfil === "admin") return <Home />;
   if (perfil === "professor") return <HomeProfessor />;
-  return <Gerenciamento />;
+  return <PlanejamentoFuncionario />; // tela inicial do funcionário
 };
 
 const Router = () => {
+  const [user] = useAuthState(auth);
+  const [perfil, setPerfil] = useState<string | null>(null);
+
+  useEffect(() => {
+    const buscarPerfil = async () => {
+      if (user) {
+        const docRef = doc(db, "usuarios", user.uid);
+        const docSnap = await getDoc(docRef);
+        const dados = docSnap.data();
+        setPerfil(dados?.perfil || null);
+      }
+    };
+    buscarPerfil();
+  }, [user]);
+
   return (
     <BrowserRouter>
       <Header />
@@ -66,18 +86,33 @@ const Router = () => {
         {/* Redirecionamento dinâmico baseado no perfil */}
         <Route path="/" element={<PrivateRoute element={<RedirectByPerfil />} />} />
 
-        {/* Rotas privadas fixas */}
+        {/* Rotas privadas comuns */}
         <Route path="/cadastro-aluno" element={<PrivateRoute element={<RegisterStudent />} />} />
         <Route path="/lista-de-presenca" element={<PrivateRoute element={<CallList />} />} />
         <Route path="/form-enviado" element={<PrivateRoute element={<FormSent />} />} />
         <Route path="/resumo-estatistico" element={<PrivateRoute element={<ResumoEstatistico />} />} />
         <Route path="/cadastrar-usuario" element={<PrivateRoute element={<CadastrarUsuario />} />} />
-        <Route path="/gerenciamento" element={<PrivateRoute element={<Gerenciamento />} />} />
         <Route path="/usuarios" element={<PrivateRoute element={<ListarUsuario />} />} />
         <Route path="/editar-usuario/:id" element={<PrivateRoute element={<EditarUsuario />} />} />
         <Route path="/admin/gerenciamento-alunos" element={<PrivateRoute element={<ResumoAlunos />} />} />
         <Route path="/admin/editar-aluno/:cursoId/:turmaId/:alunoId" element={<PrivateRoute element={<EditarAluno />} />} />
-        <Route path="/admin/resumo-presencas" element={<ResumoPresencas />} />
+        <Route path="/admin/resumo-presencas" element={<PrivateRoute element={<ResumoPresencas />} />} />
+
+        {/* Rota de gerenciamento adaptável */}
+        <Route
+          path="/gerenciamento"
+          element={
+            <PrivateRoute
+              element={perfil === "funcionario" ? <GerenciamentoFuncionario /> : <Gerenciamento />}
+            />
+          }
+        />
+
+        {/* Rota da consulta de presença do funcionário */}
+        <Route
+          path="/funcionario/consulta-presenca"
+          element={<PrivateRoute element={<ConsultaPresencaAluno />} />}
+        />
 
         {/* Página não encontrada */}
         <Route path="*" element={<NotFound />} />

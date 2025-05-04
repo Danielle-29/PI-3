@@ -46,7 +46,7 @@ const Header: React.FC = () => {
   const rotaLogo = () => {
     if (perfil === "admin") return "/resumo-estatistico";
     if (perfil === "professor") return "/";
-    if (perfil === "funcionario") return "/home";
+    if (perfil === "funcionario") return "/";
     return "/";
   };
 
