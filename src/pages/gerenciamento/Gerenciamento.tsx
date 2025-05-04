@@ -59,7 +59,7 @@ const Gerenciamento: React.FC = () => {
           </Card>
         </div>
 
-        <div className="card-item" onClick={() => navigate("/lista-de-presenca")}> 
+        <div className="card-item" onClick={() => navigate("/admin/resumo-presencas")}> 
           <Card sx={{ maxWidth: 300 }}>
             <CardActionArea>
               <CardMedia
@@ -70,7 +70,7 @@ const Gerenciamento: React.FC = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h6" component="div">
-                  Lista de Presença
+                  Gerenciamento de Presença
                 </Typography>
               </CardContent>
             </CardActionArea>

@@ -86,9 +86,13 @@ const ResumoAlunos: React.FC = () => {
     setPage(0);
   };
 
-  const alunosFiltrados = alunos.filter((aluno) =>
+  const alunosFiltrados = alunos
+  .filter((aluno) =>
     (aluno.nomeCompleto || "").toLowerCase().includes(filtro.toLowerCase())
-  );
+  )
+  .sort((a, b) =>
+  (a.nomeCompleto || "").localeCompare(b.nomeCompleto || "")
+);
 
   return (
     <Box className="container-resumo-alunos">
