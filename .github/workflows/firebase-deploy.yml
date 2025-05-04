@@ -12,6 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build app
+        run: npm run build
+
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v2.2.0
         with:
