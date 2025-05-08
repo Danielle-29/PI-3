@@ -1,0 +1,28 @@
+.painel-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.painel-formulario {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.painel-tabela {
+  margin: 0 auto;
+  max-width: 95%;
+}
+
+.MuiTableCell-head {
+  font-weight: bold !important;
+  text-align: center;
+}
+
+.MuiTablePagination-root {
+  justify-content: center !important;
+}

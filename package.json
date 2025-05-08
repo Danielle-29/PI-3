@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^12.1.5",
     "@types/chart.js": "^2.9.41",
     "@types/react": "^17.0.2",
     "@types/react-chartjs-2": "^2.0.2",

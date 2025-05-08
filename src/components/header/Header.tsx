@@ -100,12 +100,12 @@ const Header: React.FC = () => {
 
                 {perfil === "professor" && (
                   <>
-                    <Link to="/cadastro-aluno">
+                    <Link to="/painel-frequencia">
                       <Button
                         className="custom-button"
                         sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
                       >
-                        Cadastrar Aluno
+                        Painel de Frequência
                       </Button>
                     </Link>
                     <Link to="/lista-de-presenca">

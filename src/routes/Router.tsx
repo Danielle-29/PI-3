@@ -21,6 +21,8 @@ import EditarUsuario from "../pages/Usuarios/EditarUsuario";
 import ResumoAlunos from "../pages/gerenciamentoAlunos/ResumoAlunos";
 import EditarAluno from "../pages/gerenciamentoAlunos/EditarAluno";
 import ResumoPresencas from "../pages/resumoPresencas/ResumoPresencas";
+import PainelFrequencia from "../pages/CallList/PainelFrequencia";
+
 
 // Novo: páginas do funcionário
 import GerenciamentoFuncionario from "../pages/funcionario/GerenciamentoFuncionario";
@@ -97,6 +99,8 @@ const Router = () => {
         <Route path="/admin/gerenciamento-alunos" element={<PrivateRoute element={<ResumoAlunos />} />} />
         <Route path="/admin/editar-aluno/:cursoId/:turmaId/:alunoId" element={<PrivateRoute element={<EditarAluno />} />} />
         <Route path="/admin/resumo-presencas" element={<PrivateRoute element={<ResumoPresencas />} />} />
+        <Route path="/painel-frequencia" element={<PainelFrequencia />} />
+
 
         {/* Rota de gerenciamento adaptável */}
         <Route
