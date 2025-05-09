@@ -51,19 +51,18 @@ const Header: React.FC = () => {
   };
 
   return (
-    
     <header aria-label="Cabeçalho do site">
       <a href="#conteudo-principal" className="skip-link">Pular para o conteúdo</a>
       <div className="container-header">
         <div className="logo">
-            <img
-              className="logo-img"
-              src={logo}
-              alt="Logo Centro de formação Carlos Kopcak"
-              title="Centro de Formação Carlos Kopcak"
-              onClick={() => navigate(rotaLogo())}
-              style={{ cursor: "pointer" }}
-            />
+          <img
+            className="logo-img"
+            src={logo}
+            alt="Logo Centro de formação Carlos Kopcak"
+            title="Centro de Formação Carlos Kopcak"
+            onClick={() => navigate(rotaLogo())}
+            style={{ cursor: "pointer" }}
+          />
         </div>
 
         <div className="links-menu">
@@ -77,22 +76,23 @@ const Header: React.FC = () => {
             {isAuthenticated ? (
               <>
                 {perfil === "admin" && (
-                  <Link to="/cadastrar-usuario">
-                    <Button
-                      className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                    >
-                      Cadastrar Usuário
-                    </Button>
-                  </Link>
+                  <>
+                    <Link to="/cadastrar-usuario">
+                      <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
+                        Cadastrar Usuário
+                      </Button>
+                    </Link>
+                    <Link to="/cadastro-aluno">
+                      <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
+                        Cadastrar Aluno
+                      </Button>
+                    </Link>
+                  </>
                 )}
 
                 {perfil === "funcionario" && (
                   <Link to="/cadastro-aluno">
-                    <Button
-                      className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                    >
+                    <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                       Cadastrar Aluno
                     </Button>
                   </Link>
@@ -101,18 +101,12 @@ const Header: React.FC = () => {
                 {perfil === "professor" && (
                   <>
                     <Link to="/painel-frequencia">
-                      <Button
-                        className="custom-button"
-                        sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                      >
+                      <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                         Painel de Frequência
                       </Button>
                     </Link>
                     <Link to="/lista-de-presenca">
-                      <Button
-                        className="custom-button"
-                        sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                      >
+                      <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                         Lista de Presença
                       </Button>
                     </Link>
@@ -121,10 +115,7 @@ const Header: React.FC = () => {
 
                 {(perfil === "admin" || perfil === "funcionario") && (
                   <Link to="/gerenciamento">
-                    <Button
-                      className="custom-button"
-                      sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                    >
+                    <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                       Gerenciamento
                     </Button>
                   </Link>
@@ -141,10 +132,7 @@ const Header: React.FC = () => {
             ) : (
               location.pathname !== "/login" && (
                 <Link to="/login">
-                  <Button
-                    className="custom-button"
-                    sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}
-                  >
+                  <Button className="custom-button" sx={{ color: "#1B4BD2", "&:hover": { color: "#824295" } }}>
                     Login
                   </Button>
                 </Link>
