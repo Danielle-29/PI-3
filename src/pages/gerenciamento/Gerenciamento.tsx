@@ -59,7 +59,7 @@ const Gerenciamento: React.FC = () => {
           </Card>
         </div>
 
-        <div className="card-item" onClick={() => navigate("/admin/resumo-presencas")}> 
+        <div className="card-item" onClick={() => navigate("/admin/painel-frequencia")}> 
           <Card sx={{ maxWidth: 300 }}>
             <CardActionArea>
               <CardMedia

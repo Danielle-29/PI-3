@@ -99,7 +99,7 @@ const Router = () => {
         <Route path="/admin/gerenciamento-alunos" element={<PrivateRoute element={<ResumoAlunos />} />} />
         <Route path="/admin/editar-aluno/:cursoId/:turmaId/:alunoId" element={<PrivateRoute element={<EditarAluno />} />} />
         <Route path="/admin/resumo-presencas" element={<PrivateRoute element={<ResumoPresencas />} />} />
-        <Route path="/painel-frequencia" element={<PainelFrequencia />} />
+        <Route path="/admin/painel-frequencia" element={<PrivateRoute element={<PainelFrequencia />} />} />
 
 
         {/* Rota de gerenciamento adaptável */}
