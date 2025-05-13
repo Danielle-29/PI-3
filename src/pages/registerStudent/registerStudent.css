@@ -1,8 +1,8 @@
 /* CONTAINER PRINCIPAL */
 .container-register {
-  max-width: 900px;
+  max-width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem 1rem;
   text-align: center;
 }
 
@@ -10,7 +10,8 @@
   text-align: center;
   color: #1B4BD2;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
 }
 
 /* CURSO E TURMA */
@@ -18,12 +19,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
   margin-bottom: 2rem;
 }
 
 .field-single {
-  width: 300px;
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -31,20 +33,20 @@
 
 .field-single label {
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 /* CAMPOS EM DUPLA */
 .double-field {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
-  gap: 20px;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .double-field > div {
-  flex: 1;
+  flex: 1 1 45%;
   display: flex;
   flex-direction: column;
 }
@@ -52,104 +54,57 @@
 /* CAMPOS GERAIS */
 label {
   font-weight: 500;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
   text-align: left;
 }
 
-input, select, textarea {
-  padding: 8px;
+input,
+select,
+textarea {
+  padding: 0.5rem;
   border-radius: 4px;
   border: 1px solid #ccc;
   width: 100%;
-}
-
-/* TITULO RESPONSAVEL */
-.titulos {
-  font-weight: 600;
-  margin-top: 2rem;
-  text-align: left;
-  margin-bottom: 0.3rem;
-}
-
-.titulos span {
-  font-weight: 400;
-  font-size: 0.85rem;
-  margin-left: 0.3rem;
-}
-
-/* ERROS */
-.errors {
-  color: red;
-  font-size: 0.8rem;
-  margin-top: 4px;
-}
-
-/* BOTÃO */
-.form-footer {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.btn-submit {
-  padding: 10px 30px;
-  color: #1B4BD2;
-  transition: color 0.3s;
-  background-color: transparent;
-  font-weight: 500;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   font-size: 1rem;
 }
 
-.btn-submit:hover {
+/* TITULOS SECUNDÁRIOS */
+.titulos {
   color: #824295;
+  margin: 1.5rem 0 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
-/* MODAL */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px 30px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.modal-content button {
-  margin-top: 10px;
-  padding: 8px 20px;
+/* BOTÃO DE ENVIO */
+.button-submit {
+  margin-top: 2rem;
+  padding: 0.75rem 2rem;
   background-color: #1B4BD2;
   color: white;
+  font-weight: bold;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
-.modal-content button:hover {
-  background-color: #153aa8;
+.button-submit:hover {
+  background-color: #1537a8;
 }
 
-/* RESPONSIVIDADE */
-@media (max-width: 768px) {
-  .double-field {
-    flex-direction: column;
+/* RESPONSIVIDADE EXTRA */
+@media (max-width: 600px) {
+  .double-field > div {
+    flex: 1 1 100%;
   }
 
-  .form-centered,
   .field-single {
-    width: 100%;
-    align-items: stretch;
+    max-width: 100%;
+  }
+
+  .form-title {
+    font-size: 1.3rem;
   }
 }

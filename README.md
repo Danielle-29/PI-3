@@ -19,7 +19,6 @@
       * [5.2. Tecnologias Anteriores](#52-tecnologias-anteriores)
       * [5.3. Desenvolvedores Anteriores](#53-desenvolvedores-anteriores)
       * [5.4. Principais Funcionalidades Desenvolvidas](#54-principais-funcionalidades-desenvolvidas)
-      * [5.5. Dados de Desempenho](#55-dados-de-desempenho)
 
 -----
 
@@ -120,13 +119,6 @@ Na etapa anterior do projeto, foram desenvolvidas funcionalidades iniciais para 
 - Cadastro de usuários com perfis distintos e autenticação via Firebase
 - Lista de presença básica com seleção de curso
 - Painel estatístico com visualização de número de matrículas por idioma
-
-
-### 5.5. Dados de Desempenho
-
-A análise de desempenho com Lighthouse nas telas principais (Home e Cadastro) indicou boa otimização, 
-
-
 
 
 
